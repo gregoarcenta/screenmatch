@@ -1,9 +1,6 @@
 package org.arcentales.screenmatch.principal;
 
-import org.arcentales.screenmatch.models.DatosSerie;
-import org.arcentales.screenmatch.models.DatosTemporadas;
-import org.arcentales.screenmatch.models.Episodio;
-import org.arcentales.screenmatch.models.Serie;
+import org.arcentales.screenmatch.models.*;
 import org.arcentales.screenmatch.repository.SerieRepository;
 import org.arcentales.screenmatch.services.ConsumoAPI;
 import org.arcentales.screenmatch.services.ConvierteDatos;
@@ -34,6 +31,10 @@ public class Principal {
                     1 - Buscar series
                     2 - Buscar episodios
                     3 - Mostrar series buscadas
+                    4 - Buscar series por titulo
+                    5 - Top 5 mejores series
+                    6 - Buscar series por categorías
+                    7 - Filtrar series por temporadas y evaluación
                     
                     0 - Salir
                     """;
@@ -50,6 +51,18 @@ public class Principal {
                     break;
                 case 3:
                     mostrarSeriesBuscadas();
+                    break;
+                case 4:
+                    buscarSeriesPorTitulo();
+                    break;
+                case 5:
+                    buscarTop5Series();
+                    break;
+                case 6:
+                    buscarSeriesPorCategoria();
+                    break;
+                case 7:
+                    buscarSeriesPorTemporadasYEvaluacion();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -118,4 +131,56 @@ public class Principal {
 
         this.series.stream().sorted(Comparator.comparing(Serie::getGenero)).forEach(System.out::println);
     }
+
+    private void buscarSeriesPorTitulo() {
+        System.out.println("Escribe el nombre de la serie que deseas buscar:");
+        var nombreSerie = teclado.nextLine();
+
+        Optional<Serie> serieBuscada = this.serieRepository.findByTituloContainsIgnoreCase(nombreSerie);
+
+        if (serieBuscada.isPresent()) {
+            System.out.println("La serie buscada es: " + serieBuscada.get());
+        } else {
+            System.out.println("Serie no encontrada");
+        }
+    }
+
+    private void buscarTop5Series() {
+        List<Serie> topSeries = this.serieRepository.findTop5ByOrderByEvaluacionDesc();
+
+        topSeries.forEach(s -> System.out.println("Serie: " + s.getTitulo() + " - " + s.getEvaluacion()));
+        System.out.println("----------------------------------------");
+    }
+
+    private void buscarSeriesPorCategoria() {
+        System.out.println("Escribe la genero/categoria de la serie que deseas buscar:");
+        var serie = teclado.nextLine();
+        var categoria = Categoria.fromEspanol(serie);
+        List<Serie> seriesPorCategoria = serieRepository.findByGenero(categoria);
+        System.out.println("Series de la categoria: " + categoria);
+        seriesPorCategoria.forEach(System.out::println);
+    }
+
+    private void buscarSeriesPorTemporadasYEvaluacion() {
+        System.out.println("Filtrar series con cuantas temporadas?");
+        var temporadas = teclado.nextInt();
+        teclado.nextLine();
+        System.out.println("Con evaluation a partir de cual valor?");
+        var evaluacion = teclado.nextDouble();
+        teclado.nextLine();
+        List<Serie> seriesPorTemporadasYEvaluacion = serieRepository.seriesPorTemporadasYEvaluacion(temporadas,
+                                                                                                    evaluacion
+        );
+        System.out.println("*** Series filtradas ***");
+        seriesPorTemporadasYEvaluacion.forEach(s -> System.out.println(">" +
+                                                                       s.getTitulo() +
+                                                                       " - temporadas " +
+                                                                       s.getTotalTemporadas() +
+                                                                       " - evaluation " +
+                                                                       s.getEvaluacion()));
+
+
+    }
+
+
 }
