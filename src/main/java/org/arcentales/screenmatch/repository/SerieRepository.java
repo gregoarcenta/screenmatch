@@ -23,21 +23,15 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     List<Serie> seriesPorTemporadasYEvaluacion(@Param("totalTemporadas") int totalTemporadas, double evaluacion);
 
     //    Nueva lista de episodios por serie
-    @Query("""
-               SELECT e
-               FROM Serie s
-               JOIN s.episodios e
-               WHERE e.titulo ILIKE %:nombreEpisodio%
-            """)
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:nombreEpisodio%")
     List<Episodio> episodiosPorNombre(@Param("nombreEpisodio") String nombreEpisodio);
 
-    //    Top 5 eepisodios
-    @Query("""
-                SELECT e
-                FROM Serie s
-                JOIN s.episodios e
-                WHERE s = :serie
-                ORDER BY e.evaluacion DESC LIMIT 5
-            """)
+    //    Top 5 episodios
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.evaluacion DESC LIMIT 5")
     List<Episodio> top5EpisodiosPorSerie(Serie serie);
+
+    @Query("SELECT s FROM Serie s JOIN s.episodios e GROUP BY s ORDER BY MAX(e.fechaDeLanzamiento) DESC LIMIT 5")
+    List<Serie> getMostRecentReleases();
+
+
 }
