@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="css/home.css" rel="stylesheet">
+    <title>Screenmatch</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header__logo">
+            <img alt="Logo ScreenMatch" src="./img/logo.png">
+        </div>
+        <div class="header__nav">
+            <select data-categorias>
+                <option value="todos">Todas las categorías</option>
+                <option value="comedia">Comedia</option>
+                <option value="acción">Acción</option>
+                <option value="crimen">Crimen</option>
+                <option value="drama">Drama</option>
+                <option value="aventura">Aventura</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <div id="home-content">
+            <section class="section" data-name="lanzamientos">
+                <h2>Nuevos Lanzamientos</h2>
+            </section>
+
+            <section class="section" data-name="top5">
+                <h2>Top 5 Popular</h2>
+            </section>
+
+            <section class="section" data-name="series">
+                <h2>Catálogo Completo</h2>
+            </section>
+        </div>
+
+        <section class="hidden section" id="categoria-filtrada">
+            <h2 id="titulo-categoria">Resultados por categoría</h2>
+        </section>
+    </main>
+    <script src="./scripts/index.js" type="module"></script>
+</body>
+
+</html>
