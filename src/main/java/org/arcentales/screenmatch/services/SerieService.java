@@ -4,6 +4,7 @@ import org.arcentales.screenmatch.dto.EpisodioDto;
 import org.arcentales.screenmatch.dto.SerieDto;
 import org.arcentales.screenmatch.models.*;
 import org.arcentales.screenmatch.repository.SerieRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,13 +17,16 @@ public class SerieService {
     private final ConsumoAPI consumoApi = new ConsumoAPI();
     private final ConvierteDatos conversor = new ConvierteDatos();
 
+    @Value("${config.omdb.apikey}")
+    private String apiKey;
+
     public SerieService(SerieRepository repository) {
         this.repository = repository;
     }
 
     public String createSerie(String serieName) {
         String URL_BASE = "https://www.omdbapi.com/?t=";
-        String API_KEY = "&apikey=f012c411";
+        String API_KEY = "&apikey=" + apiKey;
         var formattedName = serieName.replace(" ", "+");
         var json = consumoApi.obtenerDatos(URL_BASE + formattedName + API_KEY);
         DatosSerie datos = conversor.obtenerDatos(json, DatosSerie.class);

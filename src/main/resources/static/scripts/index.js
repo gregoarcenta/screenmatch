@@ -67,7 +67,6 @@ generaSeries();
 function generaSeries() {
     const urls = ["/series/top5", "/series/lanzamientos", "/series"];
 
-    // Hace todas las solicitudes en paralelo
     Promise.all(urls.map((url) => getdatos(url)))
         .then((data) => {
             crearListaPeliculas(elementos.top5, data[0]);
